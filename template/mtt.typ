@@ -18,39 +18,7 @@
   ]
 }
 
-#let mtt-codebox(
-  fill: gray.lighten(60%),
-  inset: 1em,
-  caption: [_insert caption_#todo[insert caption]],
-  ref: "none", ..args,
-  content
-) = [
-  #block(
-    fill: fill,
-    //stroke: black,
-    inset: inset,
-    width: 100%,
-    breakable: true,
-    sticky: true,
-  )[
-    #set align(left)
-    #content
-  ]
-  #block(width: 100%)[
-    #figure(
-      block(height: -10pt),
-      caption: caption,
-      supplement: [Code Sample],
-      kind: raw,
-      ..args,
-    ) 
-    #if ref != "none" {
-      label(ref)
-    }
-  ]
-]
-
-#let breakable-figure(
+#let mtt-breakable-figure(
   kind: auto,
   caption: auto,
   ref: none,
@@ -59,11 +27,10 @@
 ) = [
   #block(
     breakable: true,
-    sticky: true,
     width: 100%,
-    align(center, content)
-  )
-  #block(width: 100%)[
+  )[
+    #set align(center)
+    #content
     #figure(
       block(height: -10pt),
       caption: caption,
@@ -83,6 +50,39 @@
       ..args,
     ) 
     #if ref != none {
+      label(ref)
+    }
+  ]
+]
+
+#let mtt-codebox(
+  fill: gray.lighten(60%),
+  inset: 1em,
+  caption: [_insert caption_#todo[insert caption]],
+  ref: "none", ..args,
+  content
+) = [
+  #block(
+    width: 100%,
+    breakable: true,
+  )[
+    #block(
+      fill: fill,
+      inset: inset,
+      width: 100%,
+      breakable: true,
+    )[
+      #set align(left)
+      #content
+    ]
+    #figure(
+      block(height: -10pt),
+      caption: caption,
+      supplement: [Code Sample],
+      kind: raw,
+      ..args,
+    )
+    #if ref != "none" {
       label(ref)
     }
   ]

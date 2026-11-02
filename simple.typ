@@ -4,7 +4,7 @@
 #import "@preview/mtt-thesis:0.1.0": *
 
 // Acronyms are optional. Define them before using mtt-acronyms() below.
-#import "@preview/acrostiche:0.7.0": init-acronyms
+#import "@preview/acrostiche:0.7.0": *
 #init-acronyms((
   "MTT": ("modular thesis template", "modular thesis templates"),
   "API": ("application programming interface", "application programming interfaces"),
@@ -33,6 +33,7 @@
     authors-horizontal: true,
     advisors: ((name: "Advisor One", email: "advisor.one@university.org"),),
     professors: ((name: "Prof. Dr. Professor", email: "professor@university.org"),),
+    empty-page: false,
   ),
   before: (
     mtt-abstract[
@@ -71,9 +72,8 @@
 This is the document body. Write chapters directly in this file, or split
 them into separate files with `#include("chapters/introduction.typ")`.
 
-The modular thesis template (MTT) provides sensible defaults while leaving
-the document structure in your control. For example, the application
-programming interface (API) can be documented in the usual way.
+The #acr("MTT") provides sensible defaults while leaving
+the document structure in your control. For example, the #acr("API") can be documented in the usual way.
 
 == A figure and a table
 
@@ -81,7 +81,7 @@ Figures and tables are collected automatically by `mtt-figures()` and
 `mtt-tables()`.
 
 #figure(
-  image("template/cover-image.svg", width: 65%),
+  image("template/cover-image.svg", width: 70%),
   caption: [A figure included in the thesis.],
 ) <example-figure>
 
@@ -98,8 +98,7 @@ Figures and tables are collected automatically by `mtt-figures()` and
 
 == Code and references
 
-Use ordinary Typst code in the thesis. Code blocks are displayed by
-`mtt-codes()`. For example, see how the source code of this document is printed into this PDF.
+Code blocks are displayed by `mtt-codebox()`. For example, see how the source code of this document is printed into this PDF in @ch:code.
 
 #mtt-codebox(
   caption: [Integration of the source code into this document.],
@@ -122,8 +121,9 @@ Custom pages can be added to the `before` or `after` list alongside the
 built-in modules. This example adds `mtt-content-frame` to `after`, so the
 framed appendix appears after the bibliography and before the Typst guide.
 
+= Code of this File <ch:code>
 
-== Code of this File
+This section reproduces the source code used to generate this entire PDF.
 
 #mtt-codebox(
   caption: [The Typst code generating this file.],
