@@ -92,11 +92,15 @@
   logo-left: [],
   logo-center: image("eth_logo_kurz_cropped.svg", height: 25pt),
   logo-right: [],
-  department: "Department of Science Fiction",
-  institute: "Institute of Witchcraft",
+  org-units: (
+    "Department of Science Fiction",
+    "Institute of Witchcraft",
+  ),
   title: [MTT -- Modular Thesis Template],
-  author-name: "Frodo Baggins",
-  author-email: "fbaggins@university.org",
+  authors: (
+    (name: "Frodo Baggins", email: "fbaggins@university.org"),
+  ),
+  authors-horizontal: true,
   cover-image: none,
   project-type: "Bachelor Thesis",
   date: datetime.today(),
@@ -111,7 +115,19 @@
   empty-page: true,
   divider-margin-inside: 6mm,
   divider-margin-outside: 0mm,
+
+  department: none,  // legacy. Use org-units instead
+  institute: none,  // legacy. Use org-units instead
+  author-name: none,  // legacy. Use authors instead
+  author-email: none,  // legacy. Use authors instead
 ) = {  // Cover page
+
+  if department != none and institute != none {
+    org-units = (department, institute)
+  }
+  if author-name != none and author-email != none {
+    authors = ((name: author-name, email: author-email),)
+  }
 
   let parse-supporters(label-sg, label-pl, people) = {
     if people == none or people.len() == 0 {}
@@ -125,17 +141,20 @@
     }
   }
 
+  let auth-mapper(author) = {
+    text(size: 22pt, author.name)
+    if  author.at("email", default: none) != none {
+      linebreak()
+      link("mailto:" + author.email)[#text(fill: black, raw(author.email))]
+    }
+  }
+
   page(
     numbering: none,
     {
       set text(12pt)
 
-      box(height: 100%, grid(
-        columns: auto,
-        rows: (auto,) + (1fr, auto) * 10,
-        align: horizon + center,
-        //stroke: blue,
-
+      let elems = (
         grid(
           columns: (auto, 1fr, auto),
           align: (left + horizon, center + horizon, right + horizon),
@@ -145,15 +164,8 @@
           logo-right,
         ),
 
-        [],  // SPACER
-
         // department
-        smallcaps(text(size: 12pt)[
-          #department\
-          #institute
-        ]),
-
-        [],  // SPACER
+        smallcaps(text(size: 12pt, org-units.join([ \ ]))),
 
         {
           v(divider-margin-outside)
@@ -161,23 +173,21 @@
           v(divider-margin-inside)
         },
 
-        [],  // SPACER
-
         // title
         text(size: 28pt, weight: "bold", par(justify: false, title)),
-
-        [],  // SPACER
-
-        // author info
-        {
-          text(size: 22pt, author-name)
-          if author-email != none {
-            linebreak()
-            link("mailto:" + author-email)[#text(fill: black, raw(author-email))]
-          }
+        
+        // authors
+        if(authors-horizontal) {
+          grid(
+            columns: (1fr, ) + (auto, 1fr) * authors.len(),
+            align: center + top,
+            //stroke: 1pt + gray,
+            [],
+            ..authors.map(auth-mapper).zip(([],)* authors.len()).flatten(),
+          )
+        } else {
+          authors.map(auth-mapper)
         },
-
-        [],  // SPACER
 
         // cover image
         {
@@ -193,12 +203,8 @@
           }
         },
 
-        [],  // SPACER
-
         // project type
         smallcaps(text(size: 16pt, project-type)),
-
-        [],  // SPACER
 
         // date
         {
@@ -209,8 +215,6 @@
           }
         },
 
-        [],  // SPACER
-
         // divider line
         {
           v(divider-margin-inside)
@@ -218,14 +222,21 @@
           v(divider-margin-outside)
         },
 
-        [],  // SPACER
-
         parse-supporters("Advisor", "Advisors", advisors),
 
-        [],  // SPACER
-
         parse-supporters("Professor", "Professors", professors),
+      ).flatten()
+
+      box(height: 100%, grid(
+        columns: auto,
+        rows: (auto,) + (1fr, auto) * (elems.len() - 1),
+        align: horizon + center,
+        //stroke: blue,
+
+        ..elems.zip(([],) * elems.len()).flatten(),
       ))
+
+      
     },
   )
   if empty-page {
@@ -400,12 +411,14 @@
   show heading.where(level: 1): set par(justify: false)
   set list(indent: 1em)
 
+  // figure caption
   show figure.caption: set block(
     inset: (
       x: 15pt,
       top: 0pt,
       bottom: 10pt,
-    )
+    ),
+    width: 100%,
   )
 
   // proper equation numbering
