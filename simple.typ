@@ -1,51 +1,44 @@
-#import "template/mtt.typ": *
+// A small, complete thesis built with MTT.
+// Copy this file into your project and replace the example content. The
 
-#import "@preview/acrostiche:0.7.0": *
+#import "@preview/mtt-thesis:0.1.0": *
 
+// Acronyms are optional. Define them before using mtt-acronyms() below.
+#import "@preview/acrostiche:0.7.0": init-acronyms
 #init-acronyms((
-  "MTT": ("modular thesis template", "modular Typst templates"),
-  // ... add more acronyms 
+  "MTT": ("modular thesis template", "modular thesis templates"),
+  "API": ("application programming interface", "application programming interfaces"),
 ))
 
+
+// mtt-thesis controls the document-wide layout. The order of items in
+// `before` and `after` is the order in which their pages are rendered.
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
-    //logo-left: rect(height: 50pt)[Your university logo],
     logo-left: image("template/eth_logo_kurz_cropped.svg", height: 25pt),
-    // logo-left: image("path/to/your/uni-logo.pdf", height: 50pt),
     logo-center: [],
-    logo-right: rect(height: 35pt)[Your department logo],
-    // logo-right: image("path/to/your/dept-logo.svg", height: 50pt),
+    logo-right: rect(height: 35pt)[Department logo],
     org-units: (
       "Department of Everything",
       "Institute of Nothing",
-      "Something Group",
     ),
     title: [A Very Inspiring Title],
     project-type: "Bachelor Thesis",
     date: datetime.today(),
     cover-image: image("template/cover-image.svg", width: 100%),
-    //cover-image: image("path/to/your/cover-image.svg", width: 100%),
     authors: (
       (name: "Jane Doe", email: "janedoe@university.org"),
       (name: "John Doe", email: "johndoe@university.org"),
     ),
     authors-horizontal: true,
-    advisors: (
-      (name: "Advisor One", email: "advisor.one@university.org"),
-      (name: "Advisor Two", email: "advisor.two@university.org"),
-    ),
-    professors: (
-      (name: "Prof. Dr. Professor", email: "professor@university.org"),
-    ),
+    advisors: ((name: "Advisor One", email: "advisor.one@university.org"),),
+    professors: ((name: "Prof. Dr. Professor", email: "professor@university.org"),),
   ),
   before: (
-    mtt-abstract()[
-      This is a very simple one-file thesis. Enjoy! 
-      
-      The code that generated this file is listed in @ch:simple below.
-
-      Additionally, there is a Typst crashcourse in @ch:quick-guide attached 
-      to the end of this file.
+    mtt-abstract[
+      This example shows the smallest useful configuration for a thesis. The
+      document body follows the configuration below, while the lists and
+      bibliography are added afterwards.
     ],
     mtt-toc(),
   ),
@@ -62,132 +55,78 @@
         title: none,
       ),
     ),
-    mtt-todos(),
+    // Custom pages can be mixed with the built-in modules.
+    page[
+      = A custom appendix
+      
+      This page is ordinary content supplied by the document author.
+    ],
+    // Add this optional guide when starting to learn Typst.
+    mtt-typst-guide(),
   ),
-  customisation: doc => {
-    //set text(fill: red)
-    //show text: set text(fill: red)
-
-    doc
-  },
 )
 
+= Introduction
 
-= A Simple Example <ch:simple>
+This is the document body. Write chapters directly in this file, or split
+them into separate files with `#include("chapters/introduction.typ")`.
 
-This is the place where your thesis will go. Just type everything you want to say in this file. Or outsource it to other files, it's up to you.
+The modular thesis template (MTT) provides sensible defaults while leaving
+the document structure in your control. For example, the application
+programming interface (API) can be documented in the usual way.
 
-== Modular Appendices
+== A figure and a table
 
-The template offers many different modules, and you can insert them in any order you like. #todo[elaborate a bit more.]
+Figures and tables are collected automatically by `mtt-figures()` and
+`mtt-tables()`.
+
+#figure(
+  image("template/cover-image.svg", width: 65%),
+  caption: [A figure included in the thesis.],
+) <example-figure>
 
 #figure(
   table(
-    columns: (auto, 1fr, auto),
-    align: left,
-    table.header([*Module*],[*Examples*],[*Notes*]),
-    [Abstract], [```typ
-    mtt-abstract[This is the text.]
-
-    mtt-abstract(
-      title: [Your Custom Title]
-    )[
-      Your abstract text.
-    ]
-
-    mtt-abstract(include "abstract.typ")
-    ```],[],
-    [Contents],[`mtt-toc()` \ `mtt-toc(title: [Custom Title])`],[],
-    [List of Figures],[`mtt-figures()` \ `mtt-figures(title: [Custom Title])`],[],
-    [List of Tables],[`mtt-tables()` \ `mtt-tables(title: [Custom Title])`],[],
-    [List of Code Samples],[`mtt-codes()` \ `mtt-codes(title: [Custom Title])`],[],
-    [List of Todos],[`mtt-todos()` \ `mtt-todos(title: [Custom Title])`],
-      [requires #link("https://typst.app/universe/package/dashy-todo/", "dashy-todo")],
-    [List of Acronyms],[`mtt-acronyms()` \ `mtt-acronyms(title: [Custom Title])`],
-      [
-        requires #link("https://typst.app/universe/package/acrostiche/", "acrostiche")
-
-        init acronyms with \ `#init-acronyms()`
-      ],
-    [Bibliography],[
-    ```typ
-    mtt-bibliography(
-      bibliography(
-        "references.bib",
-      ),
-    )
-    ```],[],
-    [External Content Frame],[`mtt-content-frame`],[],
-    [Typst Guide],[`mtt-typst-guide`],[],
-    //[],[],[],
+    columns: (auto, 1fr),
+    table.header([*Module*], [*Purpose*]),
+    [mtt-abstract], [Add an abstract page.],
+    [mtt-toc], [Add a table of contents.],
+    [mtt-bibliography], [Add a bibliography page.],
   ),
-  caption: [Available modules.]
-)
+  caption: [A table included in the thesis.],
+) <example-table>
 
-The modules can either be added before the main content:
+== Code and references
 
-#codebox(
-  caption: [Modules before the main content.],
-  ref: "code:modular"
+Use ordinary Typst code in the thesis. Code blocks are displayed by
+`mtt-codes()`. For example, see how the source code of this document is printed into this PDF.
+
+#mtt-codebox(
+  caption: [Integration of the source code into this document.],
+  ref: "example-code",
 )[
 ```typ
-#import "template/mtt.typ": *
-
-#show: mtt-thesis.with(
-  // Modules here will be displayed in this order before the main content:
-  before: (
-    mtt-abstract[Your abstract text goes here.],
-    mtt-toc(),
-  ),
-  // Modules here will be displayed in this order after the main content:
-  after: (
-    mtt-figures(),
-    mtt-bibliography(bibliography("references.bib")),
-  ),
-)
-```
+#mtt-codebox(
+  caption: [The Typst code generating this file.],
+  ref: "code:this-file",
+  raw(read("simple.typ"), lang: "typ"),
+)```
 ]
 
-You can also add your own pages:
+The bibliography uses a regular BibLaTeX file. For example, this sentence
+can cite a paper with @R:scipy.
 
-#codebox(
-  caption: [Custom appendices.],
-  ref: "code:custom"
-)[
-```typ
-#import "template/mtt.typ": *
+== Custom appendices
 
-#show: mtt-thesis.with(
-  // ...
-  after: (
-    page[
-      = Custom Section Title
-
-      Your custom content.
-    ],
-    mtt-figures(),
-    // ...
-  ),
-)
-```
-]
-
-The complete content of the file generating this document is shown in @code:this-file below.
-
-#figure(
-  rect(width: 60%, height: 100pt, align(horizon, [Imagine a pink elephant!])),
-  caption: [This a picture of an elephant.],
-)
+Custom pages can be added to the `before` or `after` list alongside the
+built-in modules. This example adds `mtt-content-frame` to `after`, so the
+framed appendix appears after the bibliography and before the Typst guide.
 
 
 == Code of this File
 
-#codebox(
+#mtt-codebox(
   caption: [The Typst code generating this file.],
   ref: "code:this-file",
   raw(read("simple.typ"), lang: "typ"),
 )
-
-
-// Typst guide
-#include "template/typst-guide.typ"

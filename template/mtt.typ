@@ -18,7 +18,7 @@
   ]
 }
 
-#let codebox(
+#let mtt-codebox(
   fill: gray.lighten(60%),
   inset: 1em,
   caption: [_insert caption_#todo[insert caption]],
