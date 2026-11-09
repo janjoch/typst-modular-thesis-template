@@ -2,6 +2,7 @@
 #import "@preview/acrostiche:0.7.0": print-index
 #import "@preview/gentle-clues:1.3.1": code, task
 
+// Displays a task-style placeholder with an optional explanation and usage snippet.
 #let mtt-placeholder(
   title: "",
   description: none,
@@ -18,6 +19,7 @@
   ]
 }
 
+// Places content in a breakable figure and infers the figure kind when requested.
 #let mtt-breakable-figure(
   kind: auto,
   caption: auto,
@@ -48,14 +50,14 @@
         }
       },
       ..args,
-    ) 
+    )
     #if ref != none {
       label(ref)
     }
   ]
 ]
 
-// breakable code sample box
+// Places a breakable code sample in a raw figure with a configurable caption and label.
 #let mtt-code-sample(
   caption: auto,
   ref: none,
@@ -87,7 +89,8 @@
   fill: gray.lighten(60%),
   inset: 1em,
   caption: [_insert caption_#todo[insert caption]],
-  ref: "none", ..args,
+  ref: "none",
+  ..args,
   content
 ) = [
   #block(
@@ -116,6 +119,7 @@
   ]
 ]
 
+// Builds the thesis cover page
 #let mtt-coverpage(
   logo-left: [],
   logo-center: image("eth_logo_kurz_cropped.svg", height: 25pt),
@@ -144,11 +148,11 @@
   divider-margin-inside: 6mm,
   divider-margin-outside: 0mm,
 
-  department: none,  // legacy. Use org-units instead
-  institute: none,  // legacy. Use org-units instead
-  author-name: none,  // legacy. Use authors instead
-  author-email: none,  // legacy. Use authors instead
-) = {  // Cover page
+  department: none, // Legacy. Use org-units instead.
+  institute: none, // Legacy. Use org-units instead.
+  author-name: none, // Legacy. Use authors instead.
+  author-email: none, // Legacy. Use authors instead.
+) = { // Cover page
 
   if department != none and institute != none {
     org-units = (department, institute)
@@ -157,6 +161,7 @@
     authors = ((name: author-name, email: author-email),)
   }
 
+  // Converts a supporter list into singular or plural labeled contact entries.
   let parse-supporters(label-sg, label-pl, people) = {
     if people == none or people.len() == 0 {}
     else {
@@ -169,9 +174,10 @@
     }
   }
 
+  // Converts an author record into a name and optional email address.
   let auth-mapper(author) = {
     text(size: 22pt, author.name)
-    if  author.at("email", default: none) != none {
+    if author.at("email", default: none) != none {
       linebreak()
       link("mailto:" + author.email)[#text(fill: black, raw(author.email))]
     }
@@ -211,7 +217,7 @@
             align: center + top,
             //stroke: 1pt + gray,
             [],
-            ..authors.map(auth-mapper).zip(([],)* authors.len()).flatten(),
+            ..authors.map(auth-mapper).zip(([],) * authors.len()).flatten(),
           )
         } else {
           authors.map(auth-mapper)
@@ -225,7 +231,10 @@
           } else {
             mtt-placeholder(
               title: "Provide a logo",
-              description: [Pass an image to the template, or set #raw(lang: "typc", "cover-image: []") to omit:],
+              description: [
+                Pass an image to the template, or set
+                #raw(lang: "typc", "cover-image: []") to omit:
+              ],
               snippet: "coverpage: mtt-coverpage(\n\t\tcover-image: image(\"figs/cover-image.svg\", width: 100%),\n\t\t// ...\n\t),",
             )
           }
@@ -272,11 +281,13 @@
   }
 }
 
+// Creates a page containing a titled abstract.
 #let mtt-abstract(body, title: [Abstract]) = page({
   heading(level: 1, title)
   body
 })
 
+// Creates a formatted table of contents page.
 #let mtt-toc(title: [Contents]) = page({
   show outline: set par(justify: true)
   show outline.entry: it => link(
@@ -290,6 +301,7 @@
   outline(title: title, depth: 3, indent: 1.3em)
 })
 
+// Creates a list of figures of the requested figure kind.
 #let mtt-figures(
   title: [List of Figures],
   kind: image,
@@ -319,9 +331,9 @@
       } else {
         none
       }
-      let supplement = fig.supplement                // usually [Figure] or auto
+      let supplement = fig.supplement
       let sup = if supplement == auto {
-        // for image figures this is normally "Figure", for tables "Table", etc.
+        // For image figures this is normally "Figure", for tables "Table", and so on.
         fig.caption.supplement
       } else {
         supplement
@@ -330,7 +342,7 @@
       // --- Caption ---
       let caption-full = fig.caption          // full caption content (incl. numbering/supplement)
       let caption-body = if fig.caption != none {
-        fig.caption.body                      // just the caption text, no "Figure X:" prefix
+        fig.caption.body
       } else {
         none
       }
@@ -350,12 +362,25 @@
   }
 })
 
-#let mtt-tables(title: [List of Tables]) = mtt-figures(title: title, kind: table)
+// Creates a list containing only table figures.
+#let mtt-tables(title: [List of Tables]) = mtt-figures(
+  title: title,
+  kind: table,
+)
 
-#let mtt-codes(title: [List of Code Samples]) = mtt-figures(title: title, kind: raw)
+// Creates a list containing only code sample figures.
+#let mtt-codes(title: [List of Code Samples]) = mtt-figures(
+  title: title,
+  kind: raw,
+)
 
-#let mtt-todos(title: [List of Todos]) = mtt-figures(title: title, kind: "todo")
+// Creates a list containing only todo figures.
+#let mtt-todos(title: [List of Todos]) = mtt-figures(
+  title: title,
+  kind: "todo",
+)
 
+// Creates an acronym index with configurable sorting and layout.
 #let mtt-acronyms(
   title: [List of Acronyms],
   row-gutter: 1.5em,
@@ -378,11 +403,16 @@
   )
 })
 
-#let mtt-bibliography(title: [Bibliography], bibliography) = page({
+// Creates a titled bibliography page from a bibliography element.
+#let mtt-bibliography(
+  title: [Bibliography],
+  bibliography,
+) = page({
   heading(level: 1, title)
   bibliography
 })
 
+// Places content in a centered, titled frame with configurable border and inset.
 #let mtt-content-frame(
   title: [Insert a Title],
   stroke: black,
@@ -398,8 +428,10 @@
   ))
 })
 
+// Adds the included Typst guide as a standalone page.
 #let mtt-typst-guide() = page(include "typst-guide.typ")
 
+// Main thesis layout.
 #let mtt-thesis(
   coverpage: mtt-coverpage(),
   before: (),
@@ -416,7 +448,7 @@
   customisation: body => body,
   body
 ) = {
-  // parge margins
+  // Configure page margins, including the optional binding offset.
   if "binding-width" in margin and ("x" in margin or "left" in margin and "right" in margin) {
     let (l, r) = if "x" in margin {
       (margin.remove("x"), ) * 2
@@ -439,7 +471,7 @@
   show heading.where(level: 1): set par(justify: false)
   set list(indent: 1em)
 
-  // figure caption
+  // Configure figure caption spacing.
   show figure.caption: set block(
     inset: (
       x: 15pt,
@@ -449,7 +481,7 @@
     width: 100%,
   )
 
-  // proper equation numbering
+  // Configure equation numbering and references.
   set math.equation(
     numbering: "(1)",
     supplement: "Equation",
@@ -471,7 +503,7 @@
   }
 
 
-  // Color all links as blue (e.g. email addresses)
+  // Color all links blue. (e.g. email addresses)
   show link: set text(fill: blue)
 
   // Heading styles
