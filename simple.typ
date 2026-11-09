@@ -10,6 +10,10 @@
   "API": ("application programming interface", "application programming interfaces"),
 ))
 
+#import "@preview/codly:2.0.0" as codly
+#show raw.where(block: true): codly.new
+#show: codly.theme("one-light")
+
 
 // mtt-thesis controls the document-wide layout. The order of items in
 // `before` and `after` is the order in which their pages are rendered.
@@ -96,24 +100,39 @@ Figures and tables are collected automatically by `mtt-figures()` and
   caption: [A table included in the thesis.],
 ) <example-table>
 
+
+#pagebreak()
+
 == Code and references
 
 Code blocks are displayed by `mtt-codebox()`. For example, see how the source code of this document is printed into this PDF in @ch:code.
 
-#mtt-codebox(
+/*#mtt-codebox(
   caption: [Integration of the source code into this document.],
   ref: "example-code",
+)[*/
+#mtt-code-sample(
+  caption: [Integration of the source code into this document. (See @code:simple.py)],
+  ref: "code:integ",
 )[
-```typ
-#mtt-codebox(
-  caption: [The Typst code generating this file.],
-  ref: "code:this-file",
-  raw(read("simple.typ"), lang: "typ"),
-)```
+  ```typst
+  #mtt-listing-figure(
+    caption: [The Typst code generating this file.],
+    ref: "code:simple.py"
+  )[
+    #codly.new(
+      raw(read("simple.typ"), lang: "typst", block: true),
+      file: "simple.typ",
+      indent-guides: (width: 4),
+      rainbow: true,
+      wrap-marker: [↪],
+      breakable: true,
+    )
+  ]
+  ```
 ]
 
-The bibliography uses a regular BibLaTeX file. For example, this sentence
-can cite a paper with @R:scipy.
+The bibliography uses a regular BibLaTeX file. For example, this sentence can cite a paper with @R:scipy.
 
 == Custom appendices
 
@@ -125,8 +144,24 @@ framed appendix appears after the bibliography and before the Typst guide.
 
 This section reproduces the source code used to generate this entire PDF.
 
-#mtt-codebox(
+#mtt-code-sample(
+  caption: [The Typst code generating this file.],
+  ref: "code:simple.py"
+)[
+  #codly.new(
+    raw(read("simple.typ"), lang: "typst", block: true),
+    file: "simple.typ",
+    indent-guides: (width: 4),
+    rainbow: true,
+    wrap-marker: [↪],
+    breakable: true,
+  )
+]
+
+/*#mtt-codebox(
   caption: [The Typst code generating this file.],
   ref: "code:this-file",
   raw(read("simple.typ"), lang: "typ"),
-)
+)*/
+
+//#figure(caption: [The Typst code generating this file.], raw(read("simple.typ"), lang: "typst"))

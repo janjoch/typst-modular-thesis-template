@@ -36,9 +36,9 @@ Import the package and apply `mtt-thesis` as a show rule:
 Your thesis starts here.
 ```
 
-The complete example is available in [`simple.typ`](simple.typ). It
+A complete example is available in [`simple.typ`](simple.typ). It
 demonstrates all modules and can be copied as a starting point for a thesis.
-Its bibliography data is in [`references.bib`](references.bib).
+Its bibliography data is in [`references.bib`](references.bib) (using a standard BibTeX file).
 
 ## Modules
 
@@ -57,8 +57,9 @@ Its bibliography data is in [`references.bib`](references.bib).
 - `mtt-bibliography`: Add a bibliography page.
 - `mtt-content-frame`: Add a framed appendix page.
 - `mtt-typst-guide`: Add the included Typst guide.
-- `codebox`: Display a captioned code sample.
-- `breakable-figure`: Display a figure or table in a breakable block.
+- `mtt-breakable-figure`: Display a figure or table in a breakable block.
+- `mtt-code-sample`: Display a breakable code listing with a code-sample
+  caption.
 
 `mtt-figures`, `mtt-tables`, `mtt-codes`, and `mtt-todos` accept an optional `title` argument. `mtt-figures` also accepts a `kind` argument when a custom figure kind is needed.
 
