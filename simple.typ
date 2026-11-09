@@ -60,12 +60,6 @@
         title: none,
       ),
     ),
-    // Custom pages can be mixed with the built-in modules.
-    page[
-      = A custom appendix
-      
-      This page is ordinary content supplied by the document author.
-    ],
     // Add this optional guide when starting to learn Typst.
     mtt-typst-guide(),
   ),
@@ -76,69 +70,83 @@
 This is the document body. Write chapters directly in this file, or split
 them into separate files with `#include("chapters/introduction.typ")`.
 
-The #acr("MTT") provides sensible defaults while leaving
-the document structure in your control. For example, the #acr("API") can be documented in the usual way.
+The #acr("MTT") provides reasonable defaults while leaving the document
+structure in your control. The tables below summarize the functions provided by
+the template. The examples in the following chapters demonstrate some of them
+in more detail.
 
-== A figure and a table
+== The main template function
 
-Figures and tables are collected automatically by `mtt-figures()` and
-`mtt-tables()`.
+The main entry point configures the document and assembles its parts.
 
-#figure(
-  image("template/cover-image.svg", width: 70%),
-  caption: [A figure included in the thesis.],
-) <example-figure>
+#mtt-code-sample(
+  caption: [A simple example of `#mtt-thesis`.],
+  ref: "code:simple"
+)[
+  #codly.new(
+    raw(read("README.md").split(regex("```(typ\n)?")).at(1), lang: "typst", block: true),
+    file: "simple.typ",
+    indent-guides: (width: 4),
+    rainbow: true,
+    wrap-marker: [↪],
+    breakable: true,
+  )
+]
+
+
+== Functions that generate pages
+
+These functions create complete pages or page-sized sections.
 
 #figure(
   table(
     columns: (auto, 1fr),
-    table.header([*Module*], [*Purpose*]),
-    [mtt-abstract], [Add an abstract page.],
-    [mtt-toc], [Add a table of contents.],
-    [mtt-bibliography], [Add a bibliography page.],
+    table.header([*Function*], [*Purpose*]),
+    [mtt-coverpage],
+    [Create the thesis cover page from institutional, author, and project metadata.],
+    [mtt-abstract],
+    [Create a page containing a titled abstract.],
+    [mtt-toc],
+    [Create a formatted table of contents page.],
+    [mtt-figures],
+    [Create a list of figures of a selected figure kind.],
+    [mtt-tables],
+    [Create a list containing only table figures.],
+    [mtt-codes],
+    [Create a list containing only code sample figures.],
+    [mtt-todos],
+    [Create a list containing only todo figures.],
+    [mtt-acronyms],
+    [Create an acronym index with configurable sorting and layout.],
+    [mtt-bibliography],
+    [Create a titled bibliography page.],
+    [mtt-content-frame],
+    [Place content in a centered, titled frame.],
+    [mtt-typst-guide],
+    [Add the bundled Typst guide as a standalone page.],
   ),
-  caption: [A table included in the thesis.],
-) <example-table>
+  caption: [Functions that generate pages.],
+)
 
+== Smaller helper functions
 
-#pagebreak()
+These functions support common content patterns without creating a complete
+document page.
 
-== Code and references
+#figure(
+  table(
+    columns: (auto, 1fr),
+    table.header([*Function*], [*Purpose*]),
+    [mtt-placeholder],
+    [Display a task-style placeholder with an explanation and usage snippet.],
+    [mtt-breakable-figure],
+    [Place content in a breakable figure and infer its figure kind when requested.],
+    [mtt-code-sample],
+    [Place a breakable code sample in a raw figure with a configurable caption and label.],
+  ),
+  caption: [Smaller helper functions.],
+)
 
-Code blocks are displayed by `mtt-codebox()`. For example, see how the source code of this document is printed into this PDF in @ch:code.
-
-/*#mtt-codebox(
-  caption: [Integration of the source code into this document.],
-  ref: "example-code",
-)[*/
-#mtt-code-sample(
-  caption: [Integration of the source code into this document. (See @code:simple.py)],
-  ref: "code:integ",
-)[
-  ```typst
-  #mtt-listing-figure(
-    caption: [The Typst code generating this file.],
-    ref: "code:simple.py"
-  )[
-    #codly.new(
-      raw(read("simple.typ"), lang: "typst", block: true),
-      file: "simple.typ",
-      indent-guides: (width: 4),
-      rainbow: true,
-      wrap-marker: [↪],
-      breakable: true,
-    )
-  ]
-  ```
-]
-
-The bibliography uses a regular BibLaTeX file. For example, this sentence can cite a paper with @R:scipy.
-
-== Custom appendices
-
-Custom pages can be added to the `before` or `after` list alongside the
-built-in modules. This example adds `mtt-content-frame` to `after`, so the
-framed appendix appears after the bibliography and before the Typst guide.
 
 = Code of this File <ch:code>
 
