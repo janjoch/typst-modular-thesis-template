@@ -1,4 +1,4 @@
-# MTT Thesis
+# MTT – Modular Thesis Template
 
 MTT is a modular thesis layout for Typst. It provides a configurable cover page and reusable pages for abstracts, contents, figures, tables, code samples, todos, acronyms, bibliographies, and appendices.
 
