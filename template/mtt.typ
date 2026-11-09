@@ -2,7 +2,7 @@
 #import "@preview/acrostiche:0.7.0": print-index
 #import "@preview/gentle-clues:1.3.1": code, task
 
-#let placeholder(
+#let mtt-placeholder(
   title: "",
   description: none,
   snippet: "",
@@ -55,7 +55,35 @@
   ]
 ]
 
-#let mtt-codebox(
+// breakable code sample box
+#let mtt-code-sample(
+  caption: auto,
+  ref: none,
+  supplement: [Code Sample],
+  ..args,
+  content
+) = [
+  #block(
+    breakable: true,
+    width: 100%,
+  )[
+    #set align(left)
+    #content
+  ]
+  #figure(
+    block(height: -10pt),
+    caption: caption,
+    supplement: supplement,
+    kind: raw,
+    ..args,
+  )
+  #if ref != none {
+    label(ref)
+  }
+]
+
+// DEPRECATED. Use mtt-code-sample instead
+#let codebox(
   fill: gray.lighten(60%),
   inset: 1em,
   caption: [_insert caption_#todo[insert caption]],
@@ -195,9 +223,9 @@
           if cover-image != none {
             cover-image
           } else {
-            placeholder(
+            mtt-placeholder(
               title: "Provide a logo",
-              description: [Pass an image to the template, or set #raw(lang: "typc", "logo: []") to omit:],
+              description: [Pass an image to the template, or set #raw(lang: "typc", "cover-image: []") to omit:],
               snippet: "coverpage: mtt-coverpage(\n\t\tcover-image: image(\"figs/cover-image.svg\", width: 100%),\n\t\t// ...\n\t),",
             )
           }
