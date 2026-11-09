@@ -85,7 +85,7 @@ The main entry point configures the document and assembles its parts.
 )[
   #codly.new(
     raw(read("README.md").split(regex("```(typ\n)?")).at(1), lang: "typst", block: true),
-    file: "simple.typ",
+    file: "simple.typ (from README)",
     indent-guides: (width: 4),
     rainbow: true,
     wrap-marker: [↪],
@@ -154,11 +154,11 @@ This section reproduces the source code used to generate this entire PDF.
 
 #mtt-code-sample(
   caption: [The Typst code generating this file.],
-  ref: "code:simple.py"
+  ref: "code:example.typ"
 )[
   #codly.new(
-    raw(read("simple.typ"), lang: "typst", block: true),
-    file: "simple.typ",
+    raw(read("example.typ"), lang: "typst", block: true),
+    file: "example.typ",
     indent-guides: (width: 4),
     rainbow: true,
     wrap-marker: [↪],
@@ -166,10 +166,3 @@ This section reproduces the source code used to generate this entire PDF.
   )
 ]
 
-/*#mtt-codebox(
-  caption: [The Typst code generating this file.],
-  ref: "code:this-file",
-  raw(read("simple.typ"), lang: "typ"),
-)*/
-
-//#figure(caption: [The Typst code generating this file.], raw(read("simple.typ"), lang: "typst"))
