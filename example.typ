@@ -96,7 +96,7 @@ The main entry point configures the document and assembles its parts.
 
 == Functions that generate pages
 
-These functions create complete pages or page-sized sections.
+These functions create complete pages or page-sized sections. They are mainly intended as appendix modules, as illustrated in @code:simple on lines 10-20.
 
 #figure(
   table(
