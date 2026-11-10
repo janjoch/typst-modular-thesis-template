@@ -7,7 +7,7 @@ license = "Apache-2.0"
 description = "Modular thesis template with configurable front matter and document sections."
 repository = "https://github.com/janjoch/typst-modular-thesis-template"
 keywords = ["thesis", "ETH Zurich", "academic writing", "front matter"]
-categories = ["thesis"]
+categories = ["thesis", "report", "layout"]
 exclude = [
   "/playground*",
   "/example.typ",
