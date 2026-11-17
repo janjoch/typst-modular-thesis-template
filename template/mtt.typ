@@ -154,7 +154,7 @@
 // Builds the thesis cover page
 #let mtt-coverpage(
   logo-left: [],
-  logo-center: image("eth_logo_kurz_cropped.svg", height: 25pt),
+  logo-center: rect("your university logo", height: 35pt),
   logo-right: [],
   org-units: (
     "Department of Science Fiction",
@@ -270,7 +270,7 @@
             cover-image
           } else {
             mtt-placeholder(
-              title: "Provide a logo",
+              title: "Configure the Coverpage",
               description: [
                 Pass an image to the template, or set
                 #raw(lang: "typc", "cover-image: []") to omit:

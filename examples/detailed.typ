@@ -1,7 +1,7 @@
 // A small, complete thesis built with MTT.
 // Copy this file into your project and replace the example content. The
 
-#import "@preview/mtt-thesis:0.1.0": *
+#import "@preview/mtt-thesis:0.1.1": *
 
 // Acronyms are optional. Define them before using mtt-acronyms() below.
 #import "@preview/acrostiche:0.7.0": *
@@ -19,7 +19,7 @@
 // `before` and `after` is the order in which their pages are rendered.
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
-    logo-left: image("template/eth_logo_kurz_cropped.svg", height: 25pt),
+    logo-left: image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
     logo-center: [],
     logo-right: rect(height: 35pt)[Department logo],
     org-units: (
@@ -29,7 +29,7 @@
     title: [A Very Inspiring Title],
     project-type: "Bachelor Thesis",
     date: datetime.today(),
-    cover-image: image("template/cover-image.svg", width: 100%),
+    cover-image: image("assets/cover-image.svg", width: 100%),
     authors: (
       (name: "Jane Doe", email: "janedoe@university.org"),
       (name: "John Doe", email: "johndoe@university.org"),
@@ -84,7 +84,7 @@ The main entry point configures the document and assembles its parts.
   ref: "code:simple"
 )[
   #codly.new(
-    raw(read("README.md").split(regex("```(typ\n)?")).at(1), lang: "typst", block: true),
+    raw(read("../README.md").split(regex("```(typ\n)?")).at(1), lang: "typst", block: true),
     file: "simple.typ (from README)",
     indent-guides: (width: 4),
     rainbow: true,
@@ -156,11 +156,11 @@ This section reproduces the source code used to generate this entire PDF.
 
 #mtt-code-sample(
   caption: [The Typst code generating this file.],
-  ref: "code:example.typ"
+  ref: "code:detailed.typ"
 )[
   #codly.new(
-    raw(read("example.typ"), lang: "typst", block: true),
-    file: "example.typ",
+    raw(read("detailed.typ"), lang: "typst", block: true),
+    file: "detailed.typ",
     indent-guides: (width: 4),
     rainbow: true,
     wrap-marker: [↪],

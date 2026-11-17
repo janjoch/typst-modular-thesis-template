@@ -1,6 +1,6 @@
 [package]
 name = "mtt-thesis"
-version = "0.1.0"
+version = "0.1.1"
 entrypoint = "template/mtt.typ"
 authors = ["Janjo <https://github.com/janjoch>"]
 license = "Apache-2.0"
@@ -15,13 +15,10 @@ keywords = [
 ]
 categories = ["thesis", "report", "layout"]
 exclude = [
-  "/playground*",
-  "/example.typ",
-  "/example.pdf",
-  "/references.bib",
+  "/example*/",
 ]
 
 [template]
-path = "template"
-entrypoint = "mtt.typ"
+path = "examples"
+entrypoint = "detailed.typ"
 thumbnail = "thumbnail.png"

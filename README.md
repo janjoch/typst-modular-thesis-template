@@ -7,12 +7,14 @@ MTT is a modular thesis layout for Typst. It provides a configurable cover page 
 Import the package and apply `mtt-thesis` as a show rule:
 
 ```typ
-#import "@preview/mtt-thesis:0.1.0": *
+#import "@preview/mtt-thesis:0.1.1": *
 
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
+    logo-center: image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
     org-units: ("Department of Everything",),
     title: [A Very Inspiring Title],
+    cover-image: image("assets/cover-image.svg"),
     project-type: "Bachelor Thesis",
     authors: ((name: "Jane Doe", email: "janedoe@university.org"),),
   ),
@@ -23,23 +25,33 @@ Import the package and apply `mtt-thesis` as a show rule:
   after: (
     mtt-figures(),
     mtt-tables(),
-    mtt-bibliography(
-      bibliography("references.bib"), // requires this file existing
-    ),
   ),
 )
 
 = Introduction
 
 Your thesis starts here.
+
+#figure(
+  image("assets/cover-image.svg"),
+  caption: [A figure, which is automatically included in the List of Figures.]
+)
+
+#figure(
+  table(
+    columns: (auto, auto),
+    [One], [Two],
+    [Three], [Four],
+  ),
+  caption: [A table, which is automatically included in the List of Tables.]
+)
 ```
 
-A complete example is available in [`example.typ`](example.typ). It demonstrates all modules and can be copied as a starting point for a thesis. Its bibliography data is in [`references.bib`](references.bib) (using a standard BibTeX file).
+This example renders to [examples/simple.pdf](examples/simple.pdf). More examples are available in the [examples](examples) folder.
 
 ## Modules
 
-- `mtt-thesis`: Apply the thesis layout, configure margins and localization,
-  and insert content before and after the main body.
+- `mtt-thesis`: Apply the thesis layout, configure margins and localization, and insert content before and after the main body.
 - `mtt-coverpage`: Create a cover page with logos, organizational units, title, authors, advisors, professors, project type, date, and cover image.
 - `mtt-abstract`: Add an abstract page.
 - `mtt-toc`: Add a table of contents.
@@ -57,9 +69,12 @@ A complete example is available in [`example.typ`](example.typ). It demonstrates
 
 `mtt-figures`, `mtt-tables`, `mtt-codes`, and `mtt-todos` accept an optional `title` argument. `mtt-figures` also accepts a `kind` argument when a custom figure kind is needed.
 
-## Example
+## Examples
 
-See the file [example.typ](example.typ) and the [PDF](example.pdf) compiled from it.
+The [examples](examples/) folder contains several examples:
+
+- [simple.typ](examples/simple.typ), as seen at the top of this readme &rarr; [PDF](examples/simple.pdf)
+- [detailed.typ](examples/detailed.typ), combining this template with other useful packages and external files (such as a bibliography) &rarr; [PDF](examples/detailed.pdf)
 
 ![Example Cover Page](thumbnail.png)
 
