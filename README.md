@@ -11,12 +11,14 @@ Import the package and apply `mtt-thesis` as a show rule:
 
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
-    logo-center: image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
+    logos: (image("assets/eth_logo_kurz_cropped.svg", height: 25pt),),
     org-units: ("Department of Everything",),
     title: [A Very Inspiring Title],
+    authors: ((name: "Jane Doe", email: "janedoe@university.org"),),
     cover-image: image("assets/cover-image.svg"),
     project-type: "Bachelor Thesis",
-    authors: ((name: "Jane Doe", email: "janedoe@university.org"),),
+    advisors: none,
+    professors: ((name: "Ada Lovelace", email: "adalovelace@university.org")),
   ),
   before: (
     mtt-abstract[This is the abstract.],
@@ -47,12 +49,19 @@ Your thesis starts here.
 )
 ```
 
-This example renders to [examples/simple.pdf](examples/simple.pdf). More examples are available in the [examples](examples) folder.
+This example renders to [examples/simple.pdf](examples/simple.pdf). 
+
+All examples available in the [examples](examples) folder:
+
+- [simple.typ](examples/simple.typ), as seen here &rarr; [PDF](examples/simple.pdf)
+- [detailed.typ](examples/detailed.typ), combining this template with other useful packages and external files (such as a bibliography) &rarr; [PDF](examples/detailed.pdf)
+
+![Example Cover Page](thumbnail.png)
 
 ## Modules
 
 - `mtt-thesis`: Apply the thesis layout, configure margins and localization, and insert content before and after the main body.
-- `mtt-coverpage`: Create a cover page with logos, organizational units, title, authors, advisors, professors, project type, date, and cover image.
+- `mtt-coverpage`: Create a highly customisable cover page with logos, organizational units, title, authors, advisors, professors, project type, date, and cover image.
 - `mtt-abstract`: Add an abstract page.
 - `mtt-toc`: Add a table of contents.
 - `mtt-figures`: Add a list of figures for a figure kind.
@@ -69,14 +78,6 @@ This example renders to [examples/simple.pdf](examples/simple.pdf). More example
 
 `mtt-figures`, `mtt-tables`, `mtt-codes`, and `mtt-todos` accept an optional `title` argument. `mtt-figures` also accepts a `kind` argument when a custom figure kind is needed.
 
-## Examples
-
-The [examples](examples/) folder contains several examples:
-
-- [simple.typ](examples/simple.typ), as seen at the top of this readme &rarr; [PDF](examples/simple.pdf)
-- [detailed.typ](examples/detailed.typ), combining this template with other useful packages and external files (such as a bibliography) &rarr; [PDF](examples/detailed.pdf)
-
-![Example Cover Page](thumbnail.png)
 
 ## Dependencies
 

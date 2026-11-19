@@ -11,11 +11,7 @@
 ) = {
   task(title: title)[
     #if description != none { description }
-    #code[#raw(
-      lang: "typc",
-      block: true,
-      "#show: " + template + ".with(\n  " + snippet + "\n  // ...\n)",
-    )]
+    #code(snippet)
   ]
 }
 
@@ -153,14 +149,15 @@
 
 // Builds the thesis cover page
 #let mtt-coverpage(
-  logo-left: [],
-  logo-center: rect("your university logo", height: 35pt),
-  logo-right: [],
+  logos: (
+    rect[your university logo],
+    rect[your department logo]
+  ),
   org-units: (
     "Department of Science Fiction",
     "Institute of Witchcraft",
   ),
-  title: [MTT -- Modular Thesis Template],
+  title: none,
   authors: (
     (name: "Frodo Baggins", email: "fbaggins@university.org"),
   ),
@@ -170,22 +167,54 @@
   date: datetime.today(),
   advisors: (
     (name: "Saruman", email: "saruman@wizards.university.org"),
-    //(name: "Gandalf", mail: "gandalf@ethz.ch"),
   ),
   professors: (
     (name: "Gandalf", email: "gandalf@wizards.university.org"),
-    //(name: "Gandalf", mail: "gandalf@ethz.ch"),
   ),
   empty-page: true,
   divider-margin-inside: 6mm,
   divider-margin-outside: 0mm,
 
+  logo-left: [], // Legacy. Use org-units instead.
+  logo-center: [], // Legacy. Use org-units instead.
+  logo-right: [], // Legacy. Use org-units instead.
   department: none, // Legacy. Use org-units instead.
   institute: none, // Legacy. Use org-units instead.
   author-name: none, // Legacy. Use authors instead.
   author-email: none, // Legacy. Use authors instead.
 ) = { // Cover page
+  
+  // example code
+  let example-code = [
+    ```typst
+    #show: mtt-thesis.with(
+      coverpage: mtt-coverpage(
+        logos: (image("assets/eth_logo_kurz_cropped.svg"),),
+        org-units: ("My Institute", "My Department"),
+        title: [A Very Inspiring Title],
+        authors: ((name: "me", email: "my@email.com"),),
+        cover-image: image("assets/cover-image.svg"),
+        project-type: "Hobby Project",
+        date: datetime(day: 1, month: 1, year: 1970),
+        advisors: ((name: "ChatGPT", email: "chatty@openai.com"),),
+        professors: none,
+      ),
+      before: (
+        mtt-abstract[This is the abstract.],
+        mtt-toc(),
+      ),
+      after: (
+        mtt-figures(),
+        mtt-tables(),
+      ),
+    )
+    ```
+  ]
 
+  // look for legacy arguments
+  if logo-left != [] or logo-center != [] or logo-right != [] {
+    logos = (logo-left, logo-center, logo-right)
+  }
   if department != none and institute != none {
     org-units = (department, institute)
   }
@@ -193,9 +222,51 @@
     authors = ((name: author-name, email: author-email),)
   }
 
+  // parse logos
+  if type(logos) != array {
+    logos = (logos, )
+  }
+  if logos.len() == 1 {
+    logos = logos.at(0)
+  }
+  else if logos.len() >= 1 {
+    logos = mtt-space-equally(
+      first-space: false,
+      last-space: false,
+      logos,
+    )
+  }
+
+  // parse authors
+  if type(authors) != array {
+    authors = (authors, )
+  }
+
+  // parse org-units
+  if org-units == none or org-units == () {
+    org-units = ()
+  }
+  else {
+    if type(org-units) != array {
+      org-units = (org-units,)
+    }
+    org-units = smallcaps(
+      text(size: 12pt, org-units.join([ \ ]))
+    )
+  }
+
+  // parse supporters
+  if advisors == none {}
+  else if type(advisors) != array {
+    advisors = (advisors, )
+  }
+  if professors == none {}
+  else if type(professors) != array {
+    professors = (professors, )
+  }
   // Converts a supporter list into singular or plural labeled contact entries.
   let parse-supporters(label-sg, label-pl, people) = {
-    if people == none or people.len() == 0 {}
+    if people == none or people.len() == 0 {()}
     else {
       if people.len() == 1 [#label-sg: ]
       else [#label-pl: ]
@@ -221,29 +292,10 @@
       set text(12pt)
 
       let elems = (
+        logos,
+        org-units,
 
-        // logos
-        /*grid(
-          columns: (auto, 1fr, auto),
-          align: (left + horizon, center + horizon, right + horizon),
-          //rows: 80pt,
-          logo-left,
-          logo-center,
-          logo-right,
-        ),*/
-        mtt-space-equally(
-          first-space: false,
-          last-space: false,
-          (
-            logo-left,
-            logo-center,
-            logo-right,
-          ),
-        ),
-
-        // department
-        smallcaps(text(size: 12pt, org-units.join([ \ ]))),
-
+        // divider line
         {
           v(divider-margin-outside)
           line(length: 100%)
@@ -251,7 +303,19 @@
         },
 
         // title
-        text(size: 28pt, weight: "bold", par(justify: false, title)),
+        {
+          if title == none {
+            mtt-placeholder(
+              title: "Configure the Coverpage",
+              description: [
+                Configure your coverpage and document. \ This instruction disappears as soon as you set your own title.
+              ],
+              snippet: example-code,
+            )
+          } else {
+          text(size: 28pt, weight: "bold", par(justify: false, title))
+          }
+        },
         
         // authors
         if(authors-horizontal) {
@@ -266,18 +330,7 @@
         // cover image
         {
           // Show task clue in the logo area when cover fields are missing
-          if cover-image != none {
-            cover-image
-          } else {
-            mtt-placeholder(
-              title: "Configure the Coverpage",
-              description: [
-                Pass an image to the template, or set
-                #raw(lang: "typc", "cover-image: []") to omit:
-              ],
-              snippet: "coverpage: mtt-coverpage(\n\t\tcover-image: image(\"figs/cover-image.svg\", width: 100%),\n\t\t// ...\n\t),",
-            )
-          }
+          if cover-image == none { () } else { cover-image }
         },
 
         // project type
@@ -287,9 +340,8 @@
         {
           if type(date) == datetime {
             date.display("[day] [month repr:long] [year]")
-          } else {
-            date
-          }
+          } else if date == none {()}
+          else {date}
         },
 
         // divider line
@@ -486,6 +538,10 @@
     lang: "EN",
     region: "GB",
   ),
+  page-setup: (
+    paper: "a4",
+    binding: left,
+  ),
   customisation: body => body,
   body
 ) = {
@@ -501,8 +557,7 @@
     margin.outside = r - binding-width / 2
   }
   set page(
-    paper: "a4",
-    binding: left,
+    ..page-setup,
     margin: margin,
   )
 

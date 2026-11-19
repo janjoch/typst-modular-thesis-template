@@ -14,9 +14,7 @@ keywords = [
   "modular",
 ]
 categories = ["thesis", "report", "layout"]
-exclude = [
-  "/example*/",
-]
+exclude = []
 
 [template]
 path = "examples"

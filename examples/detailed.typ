@@ -19,23 +19,27 @@
 // `before` and `after` is the order in which their pages are rendered.
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
-    logo-left: image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
-    logo-center: [],
-    logo-right: rect(height: 35pt)[Department logo],
+    logos: (
+      image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
+      rect(height: 35pt)[Department logo],
+    ),
     org-units: (
       "Department of Everything",
       "Institute of Nothing",
     ),
     title: [A Very Inspiring Title],
-    project-type: "Bachelor Thesis",
-    date: datetime.today(),
-    cover-image: image("assets/cover-image.svg", width: 100%),
     authors: (
       (name: "Jane Doe", email: "janedoe@university.org"),
       (name: "John Doe", email: "johndoe@university.org"),
     ),
     authors-horizontal: true,
-    advisors: ((name: "Advisor One", email: "advisor.one@university.org"),),
+    cover-image: image("assets/cover-image.svg", width: 100%),
+    project-type: "Bachelor Thesis",
+    date: datetime.today(),
+    advisors: (
+      (name: "Advisor One", email: "advisor.one@university.org"),
+      (name: "Advisor Two", email: "advisor.two@university.org"),
+    ),
     professors: ((name: "Prof. Dr. Professor", email: "professor@university.org"),),
     empty-page: false,
   ),

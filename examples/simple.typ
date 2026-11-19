@@ -2,12 +2,14 @@
 
 #show: mtt-thesis.with(
   coverpage: mtt-coverpage(
-    logo-center: image("assets/eth_logo_kurz_cropped.svg", height: 25pt),
+    logos: (image("assets/eth_logo_kurz_cropped.svg", height: 25pt),),
     org-units: ("Department of Everything",),
     title: [A Very Inspiring Title],
+    authors: ((name: "Jane Doe", email: "janedoe@university.org"),),
     cover-image: image("assets/cover-image.svg"),
     project-type: "Bachelor Thesis",
-    authors: ((name: "Jane Doe", email: "janedoe@university.org"),),
+    advisors: none,
+    professors: ((name: "Ada Lovelace", email: "adalovelace@university.org")),
   ),
   before: (
     mtt-abstract[This is the abstract.],
