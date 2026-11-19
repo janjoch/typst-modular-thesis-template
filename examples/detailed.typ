@@ -84,11 +84,11 @@ in more detail.
 The main entry point configures the document and assembles its parts.
 
 #mtt-code-sample(
-  caption: [A simple example of `#mtt-thesis`.],
+  caption: [A simple example using `#mtt-thesis`.],
   ref: "code:simple"
 )[
   #codly.new(
-    raw(read("../README.md").split(regex("```(typ\n)?")).at(1), lang: "typst", block: true),
+    raw(read("simple.typ"), lang: "typst", block: true),
     file: "simple.typ (from README)",
     indent-guides: (width: 4),
     rainbow: true,
